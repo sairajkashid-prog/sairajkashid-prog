@@ -41,6 +41,26 @@ A reproducible Python and SQL pipeline using synthetic pharmaceutical sales data
 
 [View Live Sales Report](https://sairajkashid-prog.github.io/pharma-sales-etl-quality-pipeline/)
 
+---
+
+### [Cyber Vulnerability Remediation Control Tower](https://github.com/sairajkashid-prog/cyber-vulnerability-remediation-control-tower)
+
+A real-data cybersecurity operations project integrating the CISA Known Exploited Vulnerabilities catalog with the complete daily FIRST EPSS dataset.
+
+- Processes 1,661 CISA-known exploited vulnerabilities
+- Enriches them using 356,283 real EPSS score records
+- Achieves 100% exact CVE matching
+- Identifies 338 CVEs with known ransomware campaign use
+- Creates 240 explainable Immediate Review entries
+- Detects inserted, changed and unchanged intelligence
+- Includes an interactive weekly review-capacity planner
+- Provides SQL, Excel, HTML and Streamlit reporting
+- Includes 13 automated tests and 91.13% measured coverage
+
+[View Live Cybersecurity Report](https://sairajkashid-prog.github.io/cyber-vulnerability-remediation-control-tower/)
+
+> This project creates a catalog-review order, not asset-specific risk or compliance advice. Real remediation also requires verified assets, exposure, business impact and vendor guidance.
+
 ## Currently Learning
 
 - SQL joins, aggregations, CTEs and window functions
