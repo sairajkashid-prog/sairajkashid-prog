@@ -1,4 +1,4 @@
-# Hi, I'm <span>Sairaj Sandip Kashid</span>
+# Hi, I'm Sairaj Sandip Kashid
 
 **Systems engineer who builds the layer where software meets silicon.**
 Final-year B.Tech, writing GPU kernels, physics engines, robot planners and the
