@@ -1,121 +1,93 @@
-# Hi, I'm Sairaj Kashid 👋
+# Hi, I'm <span>Sairaj Sandip Kashid</span>
 
-<p align="center">
-  <em>Aspiring Solution Expert · Business & Data Analysis · AI-Driven Productivity</em>
-</p>
+**Systems engineer who builds the layer where software meets silicon.**
+Final-year B.Tech, writing GPU kernels, physics engines, robot planners and the
+test tooling that proves they work.
 
-I build **real-data projects that solve real business problems** — from market intelligence and learner-voice analysis to interactive ROI simulators. I turn messy data into validated datasets, clear insights, and actionable recommendations. Currently seeking a **Solution Expert Intern** role where I can combine business analysis, data, and AI tools.
-
----
-
-## 🚀 Solution Expert Portfolio — TechnoEdge Learning Services
-
-Three real-data projects built specifically for an AI-first enterprise learning company. Luxurious 3D liquid-glass design, zero dependencies, live on GitHub Pages.
-
-### 👑 [AI Learning ROI Studio](https://github.com/sairajkashid-prog/ai-learning-roi-studio)
-<p><a href="https://sairajkashid-prog.github.io/ai-learning-roi-studio/"><img src="https://img.shields.io/badge/🔴_LIVE_DEMO-View_Dashboard-D4AF37?style=for-the-badge" alt="Live Demo"></a></p>
-
-A 3D animated enterprise transformation calculator — adjust workforce size, salary, investment & skill-gap to get **live ROI calculations** with an auto-generated client proposal.
-
-- Interactive ROI simulator with 5 live-sliders, gauge, breakdown bars
-- 3D floating glassmorphic cards, deep-space animated background, scroll reveals
-- Benchmarks from real data: 4,569 courses & 107,018 learner reviews
-- Auto-generated client proposal with investment, value, payback period & ROI
+I don't have a GPU on my desk. So I built the four things below on a 2-core
+laptop, made every number reproducible, and wrote down every place where the
+hardware I *don't* have would change the answer.
 
 ---
 
-### 📊 [Course Market Intelligence — Command Center](https://github.com/sairajkashid-prog/course-market-intelligence)
-<p><a href="https://sairajkashid-prog.github.io/course-market-intelligence/"><img src="https://img.shields.io/badge/🔴_LIVE_DEMO-View_Dashboard-D4AF37?style=for-the-badge" alt="Live Demo"></a></p>
+## The work
 
-What should a learning company **build & sell next**? Real-data analysis of **4,569 courses** (Coursera + Udemy) covering **92.4 million learners** — with a transparent opportunity-scoring formula.
+| repo | what it is | the number I'd point at |
+|---|---|---|
+| **[miniflex-gpu](https://github.com/sairajkashid-prog/miniflex-gpu)** | Particle physics engine (PBD / position-based fluids) with a stable C ABI, a multithreaded CPU backend and a CUDA backend | **18.1 M neighbour-pairs/s** on 2 cores; CPU and CUDA backends agree to **8.6 × 10⁻⁷** relative |
+| **[gpu-verify-lab](https://github.com/sairajkashid-prog/gpu-verify-lab)** | Differential + property-based verification for numerical kernels — the test harness, not the kernels | catches **5 of 6** seeded bug classes; the 6th is written up as a known blind spot |
+| **[mppi-fleet](https://github.com/sairajkashid-prog/mppi-fleet)** | Sampling-based model-predictive control for warehouse robot fleets, written so the CUDA port is mechanical | **0.92** path efficiency at K=2048 vs **0.69** at K=128; **10–25× fewer** shelf contacts than the reactive controller teams actually ship |
+| **[nvhealth](https://github.com/sairajkashid-prog/nvhealth)** | GPU health monitoring: drift detection, ECC tracking, burn-in | **114 tests** across the four repos; zero false positives on a healthy device across 5 seeds |
 
-- 5 interactive views: Overview, Domain Demand, Opportunity Matrix, Pricing & Trends, Recommendations
-- 3D bar charts, bubble charts, donut charts — all hand-drawn SVG with hover tooltips
-- Key finding: AI & ML has 9.2M learners on just 50 courses — highest demand-to-supply gap
-- Ranked recommendations with demand × quality × supply-gap opportunity scores
-
----
-
-### 🗣️ [Learner Voice Intelligence](https://github.com/sairajkashid-prog/learner-voice-intelligence)
-<p><a href="https://sairajkashid-prog.github.io/learner-voice-intelligence/"><img src="https://img.shields.io/badge/🔴_LIVE_DEMO-View_Dashboard-D4AF37?style=for-the-badge" alt="Live Demo"></a></p>
-
-What makes training **succeed or fail**? Analysis of **107,018 real Coursera reviews** — turning raw student feedback into a concrete content-quality playbook.
-
-- 4 interactive views: Sentiment, What Works, What Hurts, Action Plan
-- 6 positive themes + 7 negative themes with real review excerpts
-- Key finding: #1 complaint is assignments & peer review (25.7%) — not content quality
-- Data-backed design rules: DO more of this / AVOID these, each tied to a measured pain point
+Every repo has CI, a benchmark with real numbers, and a README that says what
+is *not* done yet.
 
 ---
 
-## 📦 Data Engineering & Data Quality Projects
+## What I'd say in the interview
 
-### [openFDA Regulatory DataOps Control Tower](https://github.com/sairajkashid-prog/openfda-regulatory-dataops-control-tower)
+**On the CUDA backend in miniflex-gpu.** There is no nvcc on this machine, so I
+wrote a host-side shim that emulates the CUDA slice I actually use — kernel
+launch, thread indices, device malloc/memcpy/atomics. The same `.cu` file
+compiles under `g++` and runs on the CPU in CI, which means the parity test
+between backends runs on every commit instead of only on the days I have a GPU.
+The shim is ~200 lines and it is not pretending to be a GPU; it is pretending to
+be a *second implementation*, which is what makes the parity test meaningful.
 
-A real-data operations project integrating official FDA drug-enforcement and drug-shortage records.
+**On testing numerics.** Comparing two floating-point kernels with
+`np.allclose` tells you nothing you can act on. `gpu-verify-lab` reports ULP
+distance, magnitude correlation, NaN/Inf counts and run-to-run determinism, and
+then *guesses the cause* — "this is a reassociated reduction, expected on a GPU"
+versus "index `k` is reading out of bounds". The framework's own tests are
+written by injecting bugs and asserting they are caught, and one bug class
+deliberately is not: left-to-right versus tree accumulation, which no
+input/output comparison can ever distinguish. That's in the README, prominently.
 
-- Processes 1,000 recent enforcement records and 1,651 shortage records
-- Applies severity-based data-quality checks, quarantines invalid records with exact reasons
-- Links datasets using exact package NDC identifiers
-- Produces SQL, Excel, HTML and Streamlit reporting · 12 automated tests · 91.43% coverage
+**On the bug I'm proudest of.** The MPPI benchmark first showed my planner was
+*worse* than a 30-line reactive controller on every metric. It wasn't the
+planner. The path-efficiency metric was `straight_line / distance_driven`, and
+robots stop within a tolerance of the goal, so they legitimately drive less than
+the straight-line distance and the ratio came out above 1.0. The fix was in the
+metric, not the controller — and the test `test_path_efficiency_never_exceeds_one`
+now guards it, because a metric that can exceed its own bound will fool you twice.
 
-**Real-data results:** 44 recall numbers had exact shortage-dataset NDC matches.
-
-[View Live Regulatory Report](https://sairajkashid-prog.github.io/openfda-regulatory-dataops-control-tower/)
-
----
-
-### [Pharma Sales ETL & Data Quality Pipeline](https://github.com/sairajkashid-prog/pharma-sales-etl-quality-pipeline)
-
-A reproducible Python and SQL pipeline using synthetic pharmaceutical sales data.
-
-- Processes 5,050 source records · 13 data-quality controls · 92.08% quality pass rate
-- Loads an idempotent SQLite warehouse · 15 SQL analyses
-- Generates Excel, HTML and Streamlit reports · CI via GitHub Actions
-
-[View Live Sales Report](https://sairajkashid-prog.github.io/pharma-sales-etl-quality-pipeline/)
-
----
-
-### [Cyber Vulnerability Remediation Control Tower](https://github.com/sairajkashid-prog/cyber-vulnerability-remediation-control-tower)
-
-A real-data cybersecurity operations project integrating CISA KEV with the FIRST EPSS dataset.
-
-- Processes 1,661 CISA-known exploited vulnerabilities enriched with 356,283 EPSS records
-- 100% exact CVE matching · 338 ransomware-linked CVEs · 240 prioritised review entries
-- Interactive weekly review-capacity planner · 13 automated tests · 91.13% coverage
-
-[View Live Cybersecurity Report](https://sairajkashid-prog.github.io/cyber-vulnerability-remediation-control-tower/)
+**On false positives.** In nvhealth I shipped CUSUM with the textbook constants,
+k = 0.5σ, h = 5σ. Then I measured it: **34% of clean devices raised an alarm.**
+A monitor that cries wolf gets muted on day one, and a muted monitor is worse
+than none. I measured the rate across eight (k, h) pairs and shipped k = 0.75σ,
+h = 8σ — 1% false positives, and a 1.5σ shift still caught inside 15 samples.
+The measurement is a table in the README and a test in the suite.
 
 ---
 
-## 🛠️ Skills
+## Skills, mapped to what NVIDIA asks for
 
-| Category | Tools & Technologies |
-|----------|---------------------|
-| **Data & Analytics** | SQL (joins, CTEs, window functions), Python, pandas, Excel (PivotTables, VLOOKUP/XLOOKUP) |
-| **BI & Reporting** | Streamlit dashboards, HTML reports, data visualisation, custom SVG charts |
-| **Data Engineering** | ETL pipelines, data-quality validation, SQLite, API ingestion, schema monitoring |
-| **AI Tools** | ChatGPT, Microsoft Copilot, Google Gemini, Perplexity |
-| **Dev Practices** | Git, GitHub, GitHub Actions (CI), automated testing, technical documentation |
-| **Business Analysis** | Process improvement, SWOT, MoSCoW prioritisation, BRD/SRS, stakeholder communication |
-
-## 📈 Currently Learning
-
-- Advanced SQL (window functions, query optimisation)
-- Power BI & Tableau for interactive dashboards
-- NLP for sentiment analysis & text classification
-- Business analysis frameworks & Agile methodologies
-
-## 🎯 What I Value
-
-- Accurate and reproducible analysis with honest project metrics
-- Traceable data-quality decisions
-- Responsible interpretation of real data
-- Continuous learning and improvement
+| | where I've actually done it |
+|---|---|
+| **C / C++** | `miniflex-gpu`: C++17 engine, C ABI (`dlopen`-able `.so`), ctypes bindings, header-only shared numerics so CPU and CUDA kernels cannot diverge |
+| **CUDA** | `miniflex-gpu/src/cuda/engine.cu` + the emulation shim; `mppi-fleet/PORTING.md` is an op-by-op CPU→CUDA port spec (thread mapping, texture-object SDF sampling, deterministic block reductions) |
+| **Python** | All four repos; numpy used as a stand-in for batched array ops, with the batch axis shaped the way a kernel grid would be |
+| **Test & automation** | `gpu-verify-lab` (property-based + differential testing, JUnit/HTML reporting), CI on every repo, `nvhealth` burn-in with a silent-data-corruption check |
+| **3D / simulation** | PBD/PBF fluids, granular Coulomb friction, mass-spring cloth; dam-break and sand-column benchmarks with measured compression ratios |
+| **Robotics** | MPPI trajectory optimisation, unicycle dynamics, chamfer signed-distance fields, prioritised multi-robot coordination |
+| **Linux / cloud** | SQLite-backed daemon with retention and rollups, stdlib-only so it runs on a node with no network, self-contained HTML reports for air-gapped clusters |
 
 ---
 
-I am currently open to **Solution Expert, Business Analyst, and Data Analyst internship opportunities**.
+## Reading order if you only open one
 
-📫 **Reach me at:** sairajkashidsk@gmail.com · [LinkedIn](https://www.linkedin.com/in/sairaj-kashid-4aa9802b1) · Pune, Maharashtra
+1. **[mppi-fleet/PORTING.md](https://github.com/sairajkashid-prog/mppi-fleet/blob/main/PORTING.md)** —
+   shows I know what happens *after* the numpy version works.
+2. **[gpu-verify-lab/README.md](https://github.com/sairajkashid-prog/gpu-verify-lab#readme)** —
+   shows I know what a test framework is for, including what it cannot do.
+3. **[miniflex-gpu/results/BENCHMARK.md](https://github.com/sairajkashid-prog/miniflex-gpu/blob/main/results/BENCHMARK.md)** —
+   the actual numbers, and the machine that produced them.
+
+---
+
+📍 Pune, India · 🎓 Final-year B.Tech · ✉️ sairajkashid.prog@gmail.com
+<br>🔗 [LinkedIn](https://linkedin.com/in/sairajkashid-prog) · [GitHub](https://github.com/sairajkashid-prog)
+
+<sub>Everything here was built on a 2-core laptop with no GPU. Benchmark numbers
+state the hardware they came from, and each README lists what I would do next
+with real hardware.</sub>
