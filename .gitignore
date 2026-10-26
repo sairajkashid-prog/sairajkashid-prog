@@ -1,0 +1,23 @@
+# ── OS / editor cruft ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# ── Environment & secrets ─────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.log
+
+# ── Dependencies & build output ───────────────────────────────────
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+venv/
+.venv/
+coverage/
