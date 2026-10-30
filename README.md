@@ -10,6 +10,23 @@ hardware I *don't* have would change the answer.
 
 ---
 
+## 🔗 Live work you can actually click
+
+**→ [sairajkashid-prog.github.io](https://sairajkashid-prog.github.io)** — every project deployed, no screenshots
+
+| Live deployment | What it does |
+|---|---|
+| **[CivicEye AI](https://sairajkashid-prog.github.io/civiceye-ai/)** | AI civic-issue management — React + Node capstone, 3 role dashboards, demo mode runs with no backend |
+| **[AI Learning ROI Studio](https://sairajkashid-prog.github.io/ai-learning-roi-studio/)** | 3D enterprise training-ROI simulator, 5 live sliders → generated client proposal |
+| **[Course Market Intelligence](https://sairajkashid-prog.github.io/course-market-intelligence/)** | 4,569 courses × 92.4M learners → demand-vs-supply opportunity matrix |
+| **[Learner Voice Intelligence](https://sairajkashid-prog.github.io/learner-voice-intelligence/)** | 107,018 reviews mined into a content-quality playbook |
+| **[Cyber Vulnerability Control Tower](https://sairajkashid-prog.github.io/cyber-vulnerability-remediation-control-tower/)** | CISA KEV × FIRST EPSS, real data, explainable review queue |
+| **[openFDA DataOps Control Tower](https://sairajkashid-prog.github.io/openfda-regulatory-dataops-control-tower/)** | Two FDA datasets, schema-drift detection, exact NDC linkage |
+| **[Pharma Sales ETL](https://sairajkashid-prog.github.io/pharma-sales-etl-quality-pipeline/)** | Row-level DQ rules, quarantine, idempotent SQLite warehouse |
+| **[Professional Website](https://sairajkashid-prog.github.io/ProfessionalWebsite/)** · **[React Form](https://sairajkashid-prog.github.io/react-form-app/)** · **[JS Form](https://sairajkashid-prog.github.io/assignment-3-js-form/)** · **[FSD Lab](https://sairajkashid-prog.github.io/fsd-lab/)** | Frontend foundations, all hand-built |
+
+---
+
 ## The work
 
 | repo | what it is | the number I'd point at |
